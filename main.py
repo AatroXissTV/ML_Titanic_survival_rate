@@ -1,11 +1,10 @@
 # main.py
 # created 21/01/2022 at 15:09 by Antoine 'AatroXiss' BEAUDESSON
-# last modified 21/01/2022 at 15:34 by Antoine 'AatroXiss' BEAUDESSON
+# last modified 21/01/2022 at 17:53 by Antoine 'AatroXiss' BEAUDESSON
 
 """ main.py:
 
 To do:
-    - Load the data
     - Analyze the data with EDA
     - Clean the data
     - Build a classification model
@@ -15,13 +14,15 @@ __author__ = "Antoine 'AatroXiss' BEAUDESSON"
 __copyright__ = "Copyright 2021, Antoine 'AatroXiss' BEAUDESSON"
 __credits__ = ["Antoine 'AatroXiss' BEAUDESSON"]
 __license__ = ""
-__version__ = "0.0.2"
+__version__ = "0.0.3"
 __maintainer__ = "Antoine 'AatroXiss' BEAUDESSON"
 __email__ = "antoine.beaudesson@gmail.com"
 __status__ = "Development"
 
 # standard library imports
 import pandas as pd
+import seaborn as sns
+from matplotlib import pyplot as plt
 
 # third party imports
 
@@ -33,6 +34,9 @@ import pandas as pd
 TRAIN_PATH = "dataset/train.csv"
 TEST_PATH = "dataset/test.csv"
 SUBMISSION_PATH = "dataset/gender_submission.csv"
+
+# configs
+sns.set(style='white', context='notebook', palette='deep')
 
 
 def load_dataset(path):
@@ -70,14 +74,27 @@ def main():
     test_df = load_dataset(TEST_PATH)
 
     # Examine Null Percentages in train attributwise
-    temp_train_df = ExploratoryDataAnalysis.examine_null_percentages(train_df,
-                                                                     "train")
-    temp_train_df.head()
+    eda = ExploratoryDataAnalysis
+    temp_tdf = ExploratoryDataAnalysis.examine_null_percentages(eda,
+                                                                train_df,
+                                                                "train")
+    print(temp_tdf.head())
 
     # Examine Null Percentages in test attributwise
-    temp_test_df = ExploratoryDataAnalysis.examine_null_percentages(test_df,
-                                                                    "test")
-    temp_test_df.head()
+    temp_tdf = ExploratoryDataAnalysis.examine_null_percentages(eda,
+                                                                test_df,
+                                                                "test")
+    print(temp_tdf.head())
+
+    # Display percentage of survivors per class
+    sns.histplot(x="Survived", stat="percent", data=train_df)
+    per_class_0 = round(((train_df.loc[:, "Survived"] == 0).sum() / len(train_df)) * 100, 2)  # noqa
+    per_class_1 = round(((train_df.loc[:, "Survived"] == 1).sum() / len(train_df)) * 100, 2)  # noqa
+
+    for i, fr in [(0, per_class_0), (1, per_class_1)]:
+        plt.text(i, fr+0.1, str(fr))
+
+    plt.show()
 
 
 main()
