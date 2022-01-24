@@ -1,6 +1,6 @@
 # main.py
 # created 21/01/2022 at 15:09 by Antoine 'AatroXiss' BEAUDESSON
-# last modified 24/01/2022 at 14:32 by Antoine 'AatroXiss' BEAUDESSON
+# last modified 24/01/2022 at 14:43 by Antoine 'AatroXiss' BEAUDESSON
 
 """ main.py:
 
@@ -14,7 +14,7 @@ __author__ = "Antoine 'AatroXiss' BEAUDESSON"
 __copyright__ = "Copyright 2021, Antoine 'AatroXiss' BEAUDESSON"
 __credits__ = ["Antoine 'AatroXiss' BEAUDESSON"]
 __license__ = ""
-__version__ = "0.0.5"
+__version__ = "0.0.6"
 __maintainer__ = "Antoine 'AatroXiss' BEAUDESSON"
 __email__ = "antoine.beaudesson@gmail.com"
 __status__ = "Development"
@@ -25,6 +25,7 @@ __status__ = "Development"
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
+import matplotlib.pyplot as plt
 
 # local application imports
 
@@ -224,6 +225,47 @@ def main():
             print('-' * 20)
 
     print(pd.crosstab(data_copy['Title'], data_copy[Target[0]]))
+
+    # create graphs
+    plt.figure(figsize=(16, 12))
+
+    plt.subplot(231)
+    plt.boxplot(x=data_copy['Fare'], showmeans=True, meanline=True)
+    plt.title('Fare Boxplot')
+    plt.ylabel('Fare ($)')
+
+    plt.subplot(232)
+    plt.boxplot(data_copy['Age'], showmeans=True, meanline=True)
+    plt.title('Age Boxplot')
+    plt.ylabel('Age (years)')
+
+    plt.subplot(233)
+    plt.boxplot(data_copy['FamilySize'], showmeans=True, meanline=True)
+    plt.title('Family Size Boxplot')
+    plt.ylabel('Family Size (#)')
+
+    plt.subplot(234)
+    plt.hist(x = [data_copy[data_copy['Survived']==1]['Fare'], data_copy[data_copy['Survived']==0]['Fare']], stacked=True, color=['g','r'], label=['Survived','Dead'])
+    plt.title('Fare Histogram by Survival')
+    plt.xlabel('Fare ($)')
+    plt.ylabel('# of Passengers')
+    plt.legend()
+
+    plt.subplot(235)
+    plt.hist(x = [data_copy[data_copy['Survived']==1]['Age'], data_copy[data_copy['Survived']==0]['Age']], stacked=True, color=['g','r'], label=['Survived','Dead'])
+    plt.title('Age Histogram by Survival')
+    plt.xlabel('Age (Years)')
+    plt.ylabel('# of Passengers')
+    plt.legend()
+
+    plt.subplot(236)
+    plt.hist(x = [data_copy[data_copy['Survived']==1]['FamilySize'], data_copy[data_copy['Survived']==0]['FamilySize']], stacked=True, color=['g','r'], label=['Survived','Dead'])
+    plt.title('Family Size Histogram by Survival')
+    plt.xlabel('Family Size (#)')
+    plt.ylabel('# of passengers')
+    plt.legend()
+
+    plt.show()
 
 
 main()
