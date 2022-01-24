@@ -1,6 +1,6 @@
 # main.py
 # created 21/01/2022 at 15:09 by Antoine 'AatroXiss' BEAUDESSON
-# last modified 21/01/2022 at 17:53 by Antoine 'AatroXiss' BEAUDESSON
+# last modified 24/01/2022 at 11:04 by Antoine 'AatroXiss' BEAUDESSON
 
 """ main.py:
 
@@ -14,7 +14,7 @@ __author__ = "Antoine 'AatroXiss' BEAUDESSON"
 __copyright__ = "Copyright 2021, Antoine 'AatroXiss' BEAUDESSON"
 __credits__ = ["Antoine 'AatroXiss' BEAUDESSON"]
 __license__ = ""
-__version__ = "0.0.3"
+__version__ = "0.0.4"
 __maintainer__ = "Antoine 'AatroXiss' BEAUDESSON"
 __email__ = "antoine.beaudesson@gmail.com"
 __status__ = "Development"
@@ -91,9 +91,26 @@ def main():
     per_class_0 = round(((train_df.loc[:, "Survived"] == 0).sum() / len(train_df)) * 100, 2)  # noqa
     per_class_1 = round(((train_df.loc[:, "Survived"] == 1).sum() / len(train_df)) * 100, 2)  # noqa
 
-    for i, fr in [(0, per_class_0), (1, per_class_1)]:
+    for i, fr in [(0, per_class_0), (0.92, per_class_1)]:
         plt.text(i, fr+0.1, str(fr))
 
+    plt.show()
+
+    # Examine percentage of male and female survivd
+    per_males = (
+        (train_df.loc[:, "Sex"] == "male") & (
+            train_df.loc[:, "Survived"] == 1)).sum()/(
+                train_df.loc[:, "Sex"] == "male").sum()
+    per_females = (
+        (train_df.loc[:, "Sex"] == "female") & (
+            train_df.loc[:, "Survived"] == 1)).sum()/(
+                train_df.loc[:, "Sex"] == "female").sum()
+
+    plt.bar(x=["male", "female"], height=[per_males, per_females])
+    plt.ylabel("Survived(%)")
+
+    for x, per in [(0, per_males), (0.92, per_females)]:
+        plt.text(x, per+0.005, str(round(per, 2)))
     plt.show()
 
 
