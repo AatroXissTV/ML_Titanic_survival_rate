@@ -12,7 +12,7 @@ __author__ = "Antoine 'AatroXiss' BEAUDESSON"
 __copyright__ = "Copyright 2021, Antoine 'AatroXiss' BEAUDESSON"
 __credits__ = ["Antoine 'AatroXiss' BEAUDESSON"]
 __license__ = ""
-__version__ = "0.0.8"
+__version__ = "0.0.9"
 __maintainer__ = "Antoine 'AatroXiss' BEAUDESSON"
 __email__ = "antoine.beaudesson@gmail.com"
 __status__ = "Development"
@@ -21,7 +21,7 @@ __status__ = "Development"
 
 # third party imports
 from sklearn.preprocessing import LabelEncoder
-
+import pandas as pd
 
 # local application imports
 
@@ -51,3 +51,45 @@ def convert_formats(data_cleaner):
 
     # define the target var (y)
     Target = ["Survived"]  # noqa
+
+    # define x var for original features aka feature selection
+    data1_x = [
+        'Sex',
+        'Pclass',
+        'Embarked',
+        'Title',
+        'SibSp',
+        'Parch',
+        'Age',
+        'Fare',
+        'FamilySize',
+        'IsAlone',
+    ]  # pretty name/values for charts
+
+    data1_x_calc = [
+        'Sex_Code',
+        'Pclass',
+        'Embarked_Code',
+        'Title_Code',
+        'SibSp',
+        'Parch',
+        'Age',
+        'Fare'
+    ]  # coded for algo calculation
+
+    # define x var for original w/bin features to remove continuous variables
+    data1_x_bin = [
+        'Sex_Code',
+        'Pclass',
+        'Embarked_Code',
+        'Title_Code',
+        'FamilySize',
+        'AgeBin_Code',
+        'FareBin_Code'
+    ]
+
+    # defin x and y var for dummy features original
+    data1_dummy = pd.get_dummies(data_cleaner[0][data1_x])
+    data_x_dummy = data1_dummy.columns.tolist()
+
+    return Target, data1_x, data1_x_calc, data1_x_bin, data_x_dummy, data1_dummy  # noqa

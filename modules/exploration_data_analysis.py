@@ -1,11 +1,11 @@
-# load_dataset.py
+# exploration_data_analysis.py
 # created 24/01/2022 at 15:31 by Antoine 'AatroXiss' BEAUDESSON
-# last modified 24/01/2022 at 15:31 by Antoine 'AatroXiss' BEAUDESSON
+# last modified 24/01/2022 at 17:53 by Antoine 'AatroXiss' BEAUDESSON
 
-""" load_dataset.py:
+""" clean_data.py:
 
 To do:
-    - load the data
+    - clean the data
 """
 
 __author__ = "Antoine 'AatroXiss' BEAUDESSON"
@@ -20,7 +20,6 @@ __status__ = "Development"
 # standard library imports
 
 # third party imports
-import pandas as pd
 
 # local application imports
 
@@ -31,11 +30,10 @@ import pandas as pd
 # configs
 
 
-def load_dataset(path):
-    """
-    Load the dataset from the path given in argument.
-
-    :param path: The path of the dataset to load.
-    :return: The dataset loaded.
-    """
-    return pd.read_csv(path)
+def exploration_data_analysis(cleaner_data, data1_x, target):
+    for x in data1_x:
+        if cleaner_data[0][x].dtype != 'float64':
+            print('Survival Correlation by:', x)
+            print(cleaner_data[0][[x, target[0]]].groupby(
+                x, as_index=False).mean())
+            print('-'*10, '\n')

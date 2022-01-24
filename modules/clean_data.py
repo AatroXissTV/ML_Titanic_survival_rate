@@ -12,7 +12,7 @@ __author__ = "Antoine 'AatroXiss' BEAUDESSON"
 __copyright__ = "Copyright 2021, Antoine 'AatroXiss' BEAUDESSON"
 __credits__ = ["Antoine 'AatroXiss' BEAUDESSON"]
 __license__ = ""
-__version__ = "0.0.8"
+__version__ = "0.0.9"
 __maintainer__ = "Antoine 'AatroXiss' BEAUDESSON"
 __email__ = "antoine.beaudesson@gmail.com"
 __status__ = "Development"
@@ -88,7 +88,7 @@ def fill_dataset(data_cleaner):
             dataset['Age'].median(), inplace=True
         )
         # complete embarked with mode
-        dataset['Embarked'].fillana(
+        dataset['Embarked'].fillna(
             dataset['Embarked'].mode()[0], inplace=True
         )
         # complete missing fare with median

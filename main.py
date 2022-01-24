@@ -14,7 +14,7 @@ __author__ = "Antoine 'AatroXiss' BEAUDESSON"
 __copyright__ = "Copyright 2021, Antoine 'AatroXiss' BEAUDESSON"
 __credits__ = ["Antoine 'AatroXiss' BEAUDESSON"]
 __license__ = ""
-__version__ = "0.0.8"
+__version__ = "0.0.9"
 __maintainer__ = "Antoine 'AatroXiss' BEAUDESSON"
 __email__ = "antoine.beaudesson@gmail.com"
 __status__ = "Development"
@@ -29,7 +29,10 @@ __status__ = "Development"
 
 # local application imports
 from modules.clean_data import clean_data
+from modules.convert_formats import convert_formats
 from modules.load_dataset import load_dataset
+from modules.split_train_test import split_train_and_test_data
+from modules.exploration_data_analysis import exploration_data_analysis
 
 # other imports
 
@@ -55,6 +58,15 @@ def main():
     clean_data(data_cleaner)
 
     # The third part of ML is to convert formats
+    (Target, data1_x, data1_x_calc, data1_x_bin, data_x_dummy, data1_dummy) = convert_formats(data_cleaner)  # noqa
+
+    # The fourth part of ML is to split test data and train data
+    split_train_and_test_data(data_cleaner, data1_x_calc,
+                              Target, data1_x_bin,
+                              data_x_dummy, data1_dummy)
+
+    # The fith part is the EDA
+    exploration_data_analysis(data_cleaner, data1_x, Target)
 
 
 main()
