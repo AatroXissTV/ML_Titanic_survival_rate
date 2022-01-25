@@ -14,7 +14,7 @@ __author__ = "Antoine 'AatroXiss' BEAUDESSON"
 __copyright__ = "Copyright 2021, Antoine 'AatroXiss' BEAUDESSON"
 __credits__ = ["Antoine 'AatroXiss' BEAUDESSON"]
 __license__ = ""
-__version__ = "0.1.1"
+__version__ = "0.1.4"
 __maintainer__ = "Antoine 'AatroXiss' BEAUDESSON"
 __email__ = "antoine.beaudesson@gmail.com"
 __status__ = "Development"
@@ -23,9 +23,21 @@ __status__ = "Development"
 
 # third party imports
 import pandas as pd
+from sklearn.discriminant_analysis import (
+    LinearDiscriminantAnalysis,
+    QuadraticDiscriminantAnalysis
+)
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
-from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.ensemble import (
+    AdaBoostClassifier,
+    GradientBoostingClassifier,
+    RandomForestClassifier
+)
+from sklearn.naive_bayes import GaussianNB
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.svm import SVC
+from sklearn.tree import DecisionTreeClassifier
 
 # local application imports
 
@@ -61,20 +73,36 @@ def fit_and_predict(model, X_train, y_train, X_val, y_val):
     return accuracy_score(y_val, prediction)
 
 
-def machine_learning_algorithm(test_dataset, x_train, y_train, x_val, y_val):
+def machine_learning_algorithm(test_copy, train_dataset, test_dataset,
+                               x_train, y_train, x_val, y_val):
     """
     Testing different machine learning algorithm
     And getting the accuracy
     """
 
-    model1 = GradientBoostingClassifier(
-        min_samples_split=20,
-        min_samples_leaf=60,
-        max_depth=3,
-        max_features=6
+    model1 = GradientBoostingClassifier()
+    model2 = KNeighborsClassifier(3)
+    model3 = SVC(probability=True)
+    model4 = DecisionTreeClassifier()
+    model5 = RandomForestClassifier(
+        n_estimators=100,
+        max_depth=8,
+        max_features='auto',
+        random_state=0,
+        oob_score=False,
+        min_samples_split=2,
+        criterion='gini',
+        min_samples_leaf=2,
+        bootstrap=False
     )
+    model6 = AdaBoostClassifier()
+    model7 = GaussianNB()
+    model8 = LinearDiscriminantAnalysis()
+    model9 = QuadraticDiscriminantAnalysis()
 
-    mla_list = [model1]
+    mla_list = [model1, model2, model3,
+                model4, model5, model6,
+                model7, model8, model9]
 
     i = 0
     for model in mla_list:
@@ -82,8 +110,10 @@ def machine_learning_algorithm(test_dataset, x_train, y_train, x_val, y_val):
         print("Model ", i, ":", model)
         print("ACC: ", fit_and_predict(model, x_train, y_train, x_val, y_val))
 
-    predict = model.predict(pd.get_dummies(test_dataset))
-    output = pd.DataFrame(
-        {'PassengerId': test_dataset.PassengerId, 'Survived': predict})
+    predict = model1.predict(pd.get_dummies(test_dataset))
+    output = pd.DataFrame({
+        'PassengerId': test_dataset.PassengerId,
+        'Survived': predict
+    })
     output.to_csv('submission.csv', index=False)
     print("Submission saved")
