@@ -14,7 +14,7 @@ __author__ = "Antoine 'AatroXiss' BEAUDESSON"
 __copyright__ = "Copyright 2021, Antoine 'AatroXiss' BEAUDESSON"
 __credits__ = ["Antoine 'AatroXiss' BEAUDESSON"]
 __license__ = ""
-__version__ = "0.1.3"
+__version__ = "0.1.1"
 __maintainer__ = "Antoine 'AatroXiss' BEAUDESSON"
 __email__ = "antoine.beaudesson@gmail.com"
 __status__ = "Development"
@@ -61,7 +61,7 @@ def fit_and_predict(model, X_train, y_train, X_val, y_val):
     return accuracy_score(y_val, prediction)
 
 
-def machine_learning_algorithm(test_datastet, x_train, y_train, x_val, y_val):
+def machine_learning_algorithm(test_dataset, x_train, y_train, x_val, y_val):
     """
     Testing different machine learning algorithm
     And getting the accuracy
@@ -82,8 +82,8 @@ def machine_learning_algorithm(test_datastet, x_train, y_train, x_val, y_val):
         print("Model ", i, ":", model)
         print("ACC: ", fit_and_predict(model, x_train, y_train, x_val, y_val))
 
-    predict = model1.predict(pd.get_dummies(test_datastet))
+    predict = model.predict(pd.get_dummies(test_dataset))
     output = pd.DataFrame(
-        {'PassengerId': test_datastet.PassengerId, 'Survived': predict})
+        {'PassengerId': test_dataset.PassengerId, 'Survived': predict})
     output.to_csv('submission.csv', index=False)
     print("Submission saved")

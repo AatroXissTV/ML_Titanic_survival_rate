@@ -48,18 +48,20 @@ def main():
     cleaning_data.fill_missing_values_fare()
     cleaning_data.replace_sex_values_by_numeric()
     cleaning_data.replace_embarked_values_by_numeric()
+    print(train_dataset.head())
 
     test = LoadDataset(TEST_PATH)
     test_dataset = test.load()
-    cleaning_test_data = CleanData(test_dataset)
-    cleaning_test_data.drop_useless_info()
-    cleaning_test_data.fill_missing_values_age()
-    cleaning_test_data.fill_missing_values_fare()
-    cleaning_test_data.replace_sex_values_by_numeric()
-    cleaning_test_data.replace_embarked_values_by_numeric()
+    cleaning_data = CleanData(test_dataset)
+    cleaning_data.drop_useless_info()
+    cleaning_data.fill_missing_values_age()
+    cleaning_data.fill_missing_values_fare()
+    cleaning_data.replace_sex_values_by_numeric()
+    cleaning_data.replace_embarked_values_by_numeric()
 
     x_train, x_val, y_train, y_val = modeling(train_dataset)
-    machine_learning_algorithm(test_dataset, x_train, y_train, x_val, y_val)
+    machine_learning_algorithm(test_dataset, x_train,
+                               y_train, x_val, y_val)
 
 
 main()
