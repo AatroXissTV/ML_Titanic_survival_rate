@@ -12,7 +12,7 @@ __author__ = "Antoine 'AatroXiss' BEAUDESSON"
 __copyright__ = "Copyright 2021, Antoine 'AatroXiss' BEAUDESSON"
 __credits__ = ["Antoine 'AatroXiss' BEAUDESSON"]
 __license__ = ""
-__version__ = "0.1.3"
+__version__ = "0.1.4"
 __maintainer__ = "Antoine 'AatroXiss' BEAUDESSON"
 __email__ = "antoine.beaudesson@gmail.com"
 __status__ = "Development"
@@ -46,9 +46,15 @@ def main():
     cleaning_data.drop_useless_info()
     cleaning_data.fill_missing_values_age()
     cleaning_data.fill_missing_values_fare()
+    cleaning_data.fill_missing_values_embarked()
     cleaning_data.replace_sex_values_by_numeric()
     cleaning_data.replace_embarked_values_by_numeric()
-    print(train_dataset.head())
+    cleaning_data.create_new_feature_family_size()
+    cleaning_data.create_new_feature_is_alone()
+    cleaning_data.create_new_feature_title()
+    cleaning_data.categorize_titles()
+    cleaning_data.replace_title_values_by_numeric()
+    cleaning_data.feature_selection()
 
     test = LoadDataset(TEST_PATH)
     test_dataset = test.load()
@@ -56,11 +62,22 @@ def main():
     cleaning_data.drop_useless_info()
     cleaning_data.fill_missing_values_age()
     cleaning_data.fill_missing_values_fare()
+    cleaning_data.fill_missing_values_embarked()
     cleaning_data.replace_sex_values_by_numeric()
     cleaning_data.replace_embarked_values_by_numeric()
+    cleaning_data.create_new_feature_family_size()
+    cleaning_data.create_new_feature_is_alone()
+    cleaning_data.create_new_feature_title()
+    cleaning_data.categorize_titles()
+    cleaning_data.replace_title_values_by_numeric()
+
+    # copy train
+    test_copy = test_dataset.copy()
+    cleaning_data.feature_selection()
 
     x_train, x_val, y_train, y_val = modeling(train_dataset)
-    machine_learning_algorithm(test_dataset, x_train,
+    machine_learning_algorithm(test_copy, train_dataset,
+                               test_dataset, x_train,
                                y_train, x_val, y_val)
 
 
