@@ -14,7 +14,7 @@ __author__ = "Antoine 'AatroXiss' BEAUDESSON"
 __copyright__ = "Copyright 2021, Antoine 'AatroXiss' BEAUDESSON"
 __credits__ = ["Antoine 'AatroXiss' BEAUDESSON"]
 __license__ = ""
-__version__ = "0.1.0"
+__version__ = "0.1.2"
 __maintainer__ = "Antoine 'AatroXiss' BEAUDESSON"
 __email__ = "antoine.beaudesson@gmail.com"
 __status__ = "Development"
@@ -33,6 +33,7 @@ from modules.convert_formats import convert_formats
 from modules.load_dataset import load_dataset
 from modules.split_train_test import split_train_and_test_data
 from modules.exploration_data_analysis import exploration_data_analysis
+from modules.mla import choose_mla, RandomForestClassifier
 # from views.graphs import (
 # graphs_distribution_of_quantitative_data,
 # graph_individual_features_by_survival,
@@ -78,6 +79,8 @@ def main():
     # graph_individual_features_by_survival(data_cleaner)
     # graph_distribution_of_qualitative_data(data_cleaner)
     # pair_plot_dataset(data_cleaner)
+    choose_mla(data_cleaner, Target, data1_x_bin)
+    RandomForestClassifier(data_cleaner, Target)
 
 
 main()
