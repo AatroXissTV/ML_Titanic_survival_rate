@@ -1,20 +1,18 @@
 # main.py
 # created 21/01/2022 at 15:09 by Antoine 'AatroXiss' BEAUDESSON
-# last modified 24/01/2022 at 14:43 by Antoine 'AatroXiss' BEAUDESSON
+# last modified 24/01/2022 at 15:16 by Antoine 'AatroXiss' BEAUDESSON
 
 """ main.py:
 
 To do:
-    - Analyze the data with EDA
-    - Clean the data
-    - Build a classification model
+    - Refactor the code to make it more readable.
 """
 
 __author__ = "Antoine 'AatroXiss' BEAUDESSON"
 __copyright__ = "Copyright 2021, Antoine 'AatroXiss' BEAUDESSON"
 __credits__ = ["Antoine 'AatroXiss' BEAUDESSON"]
 __license__ = ""
-__version__ = "0.1.2"
+__version__ = "0.1.3"
 __maintainer__ = "Antoine 'AatroXiss' BEAUDESSON"
 __email__ = "antoine.beaudesson@gmail.com"
 __status__ = "Development"
@@ -22,23 +20,13 @@ __status__ = "Development"
 # standard library imports
 
 # third party imports
-# import pandas as pd
-# from sklearn.model_selection import train_test_split
-# import matplotlib.pyplot as plt
-# import seaborn as sns
 
 # local application imports
-from modules.clean_data import clean_data
-from modules.convert_formats import convert_formats
-from modules.load_dataset import load_dataset
-from modules.split_train_test import split_train_and_test_data
-from modules.exploration_data_analysis import exploration_data_analysis
-from modules.mla import choose_mla, RandomForestClassifier
-# from views.graphs import (
-# graphs_distribution_of_quantitative_data,
-# graph_individual_features_by_survival,
-# graph_distribution_of_qualitative_data,
-# pair_plot_dataset,
+from modules.data_management import LoadDataset, CleanData
+from modules.machine_learning_algo import (
+    modeling,
+    machine_learning_algorithm,
+)
 
 # other imports
 
@@ -51,36 +39,27 @@ SUBMISSION_PATH = "dataset/gender_submission.csv"
 
 
 def main():
-    # the first part of ML is to load the data
-    train_df = load_dataset(TRAIN_PATH)
-    test_df = load_dataset(TEST_PATH)
 
-    # Then I create a copy of the test df and put it in a list
-    # To play with the data
-    copy_df = train_df.copy(deep=True)
-    data_cleaner = [copy_df, test_df]
+    train = LoadDataset(TRAIN_PATH)
+    train_dataset = train.load()
+    cleaning_data = CleanData(train_dataset)
+    cleaning_data.drop_useless_info()
+    cleaning_data.fill_missing_values_age()
+    cleaning_data.fill_missing_values_fare()
+    cleaning_data.replace_sex_values_by_numeric()
+    cleaning_data.replace_embarked_values_by_numeric()
 
-    # The second part of ML is to clean the data
-    clean_data(data_cleaner)
+    test = LoadDataset(TEST_PATH)
+    test_dataset = test.load()
+    cleaning_test_data = CleanData(test_dataset)
+    cleaning_test_data.drop_useless_info()
+    cleaning_test_data.fill_missing_values_age()
+    cleaning_test_data.fill_missing_values_fare()
+    cleaning_test_data.replace_sex_values_by_numeric()
+    cleaning_test_data.replace_embarked_values_by_numeric()
 
-    # The third part of ML is to convert formats
-    (Target, data1_x, data1_x_calc, data1_x_bin, data_x_dummy, data1_dummy) = convert_formats(data_cleaner)  # noqa
-
-    # The fourth part of ML is to split test data and train data
-    split_train_and_test_data(data_cleaner, data1_x_calc,
-                              Target, data1_x_bin,
-                              data_x_dummy, data1_dummy)
-
-    # The fith part is the EDA
-    exploration_data_analysis(data_cleaner, data1_x, Target)
-
-    # Display graphs
-    # graphs_distribution_of_quantitative_data(data_cleaner)
-    # graph_individual_features_by_survival(data_cleaner)
-    # graph_distribution_of_qualitative_data(data_cleaner)
-    # pair_plot_dataset(data_cleaner)
-    choose_mla(data_cleaner, Target, data1_x_bin)
-    RandomForestClassifier(data_cleaner, Target)
+    x_train, x_val, y_train, y_val = modeling(train_dataset)
+    machine_learning_algorithm(test_dataset, x_train, y_train, x_val, y_val)
 
 
 main()
