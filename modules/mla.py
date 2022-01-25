@@ -114,3 +114,21 @@ def choose_mla(cleaned_data, target, data1_x_bin):
     plt.xlabel('Accuracy Score (%)')
     plt.ylabel('Algo')
     plt.show()
+
+
+def RandomForestClassifier(cleaned_data, target):
+    y = cleaned_data[0][target]
+    features = ['Pclass', 'Sex', 'SibSp', 'Parch']
+    X = pd.get_dummies(cleaned_data[0][features])
+    X_test = pd.get_dummies(cleaned_data[1][features])
+
+    model = ensemble.RandomForestClassifier(
+        max_depth=3,
+        n_estimators=100,
+        random_state=2,
+    )
+    model.fit(X, y)
+    model.predict(X_test)
+
+    submission = pd.read_csv('dataset/gender_submission.csv')
+    submission.to_csv('submission.csv', index=False)
